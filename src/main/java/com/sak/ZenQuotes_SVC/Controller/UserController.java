@@ -1,46 +1,33 @@
 package com.sak.ZenQuotes_SVC.Controller;
 
 import com.sak.ZenQuotes_SVC.Entity.User;
-import com.sak.ZenQuotes_SVC.repository.UserRepository;
+import com.sak.ZenQuotes_SVC.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("v1/users")
+@RequestMapping("v1/auth")
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
-    @GetMapping
-    public List<User> getAllUser() {
-        return userRepository.findAll();
+    @PostMapping("sign-up")
+    public void signUpUser(@RequestBody User user) {
+        userService.registryUser(user);
     }
 
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
-        return userRepository.findById(id).orElse(null);
+    @PostMapping("login")
+    public ResponseEntity<String> loginUpUser(@RequestBody User user) {
+        boolean isValid = userService.checkUser(user);
+        if(isValid) {
+            return ResponseEntity.ok().body("Is Valid");
+        }
+        else {
+            return ResponseEntity.status(401).body("Invalid User!!");
+        }
     }
-
-    @PostMapping()
-    public User addUser(@RequestBody User user) {
-        return userRepository.save(user);
-    }
-
-    @PutMapping("/{id}")
-    public User updateUserById(@PathVariable Long id, @RequestBody User userDetail) {
-        User user=userRepository.findById(id).orElse(null);
-        if(user==null) return null;
-        user.setEmail(userDetail.getEmail());
-        user.setPassword(userDetail.getPassword());
-        return userRepository.save(user);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUserById(@PathVariable Long id) {
-        userRepository.deleteById(id);
-    }
-
 }
