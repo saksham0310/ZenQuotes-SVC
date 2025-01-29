@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<String> loginUpUser(@RequestBody User user) {
+    public ResponseEntity<String> loginUpUser(@RequestBody User user) { 
         boolean isValid = userService.checkUser(user);
         if(isValid) {
             return ResponseEntity.ok().body("Is Valid");
