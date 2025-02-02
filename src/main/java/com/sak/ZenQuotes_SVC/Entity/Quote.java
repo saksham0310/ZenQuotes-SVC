@@ -14,6 +14,16 @@ public class Quote {
     @Id
     private Long id;
     private String quoteText;
+
+    public String getQuoteTitle() {
+        return quoteTitle;
+    }
+
+    public void setQuoteTitle(String quoteTitle) {
+        this.quoteTitle = quoteTitle;
+    }
+
+    private String quoteTitle;
     private String author;
     private Date createdDate;
 
